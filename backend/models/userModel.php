@@ -26,6 +26,13 @@ class UserModel
         $stmt->execute();
         return $stmt->get_result();
     }
+    public function getAllUser()
+    {
+        $sql = "SELECT * FROM users";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
 
     // public function getAllProduct()
     // {

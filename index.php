@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/configurations/connection.php');
 require_once(__DIR__ . '/backend/controllers/authController.php');
+require_once(__DIR__ . '/backend/controllers/userController.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $page = isset($_GET['page']) ? $_GET['page'] : '';
@@ -67,7 +68,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($response);
     }
 } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $authController = new AuthController();
-    $response = $authController->handleLogout();
-    echo json_encode($response);
+    $page = isset($_GET['page']) ? $_GET['page'] : '';
+
+    if ($page === 'backend/logout') {
+        $authController = new AuthController();
+        $response = $authController->handleLogout();
+        echo json_encode($response);
+    } else if ($page === 'backend/getAllUser') {
+        $userController = new UserController();
+        $response = $userController->handleGetAllUser();
+        echo json_encode($response);
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'code' => 404,
+            'message' => 'Halaman tidak ditemukan'
+        ]);
+    }
 }

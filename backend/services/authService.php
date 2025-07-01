@@ -12,14 +12,23 @@ class authService
 
     public function handleLogin($email, $password)
     {
-        $result = $this->userModel->getUserByEmail($email);
-        if ($result->num_rows <= 0) {
+        if (empty($email) || empty($password)) {
             return [
                 'status' => 'error',
-                'code' => 404,
-                'message' => 'email user not found'
+                'code' => 400,
+                'message' => 'Email dan password wajib diisi'
             ];
         }
+
+        $result = $this->userModel->getUserByEmail($email);
+        if ($result->num_rows == 0) {
+            return [
+                'status' => 'error',
+                'code' => 401,
+                'message' => 'Email atau password salah'
+            ];
+        }
+
         $user = $result->fetch_assoc();
         if (!password_verify($password, $user['password'])) {
             return [
@@ -29,7 +38,10 @@ class authService
             ];
         }
 
-        session_start();
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['name_user'] = $user['name_user'];
         $_SESSION['email'] = $user['email'];
@@ -37,7 +49,7 @@ class authService
 
         return [
             'status' => 'ok',
-            'message' => 'Login successful',
+            'message' => 'Login berhasil',
             'user' => [
                 'id' => $user['user_id'],
                 'name_user' => $user['name_user'],
@@ -46,6 +58,7 @@ class authService
             ]
         ];
     }
+
 
     public function handleRegister($username, $email, $password)
     {
@@ -60,6 +73,14 @@ class authService
         }
 
         $newUserId = $this->userModel->registerUser($username, $email, $password);
+        if (!$newUserId) {
+            return [
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'Failed to register user'
+            ];
+        }
+
         $newUser = [
             'id' => $newUserId,
             'name_user' => $username,
@@ -72,6 +93,7 @@ class authService
             'user' => $newUser
         ];
     }
+
     public function handleLogout()
     {
         session_start();
