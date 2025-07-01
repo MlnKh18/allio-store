@@ -1,6 +1,6 @@
 # Mengaktifkan modul rewrite
 RewriteEngine On
-RewriteBase /financial_management/
+RewriteBase /toko-online-allinone/
 
 # Arahkan permintaan frontend ke file yang sesuai di views/
 # RewriteRule ^login$ views/Auth/loginScreen.php [L]
@@ -10,6 +10,6 @@ RewriteBase /financial_management/
 # RewriteRule ^pengeluaran$ views/Pengeluaran/pengeluaranScreen.php [L]
 
 # # Untuk backend, pastikan permintaan menuju index.php untuk diproses lebih lanjut
-# RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteRule ^backend/([a-zA-Z0-9_-]+)$ index.php?page=backend/$1 [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^backend/([a-zA-Z0-9_-]+)$ index.php?page=backend/$1 [QSA,L]
