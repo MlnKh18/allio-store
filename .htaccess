@@ -1,0 +1,15 @@
+# Mengaktifkan modul rewrite
+RewriteEngine On
+RewriteBase /financial_management/
+
+# Arahkan permintaan frontend ke file yang sesuai di views/
+# RewriteRule ^login$ views/Auth/loginScreen.php [L]
+# RewriteRule ^register$ views/Auth/registerScreen.php [L]
+# RewriteRule ^home$ views/Home/homeScreen.php [L]
+# RewriteRule ^pemasukan$ views/Pemasukan/pemasukanScreen.php [L]
+# RewriteRule ^pengeluaran$ views/Pengeluaran/pengeluaranScreen.php [L]
+
+# # Untuk backend, pastikan permintaan menuju index.php untuk diproses lebih lanjut
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^backend/([a-zA-Z0-9_-]+)$ index.php?page=backend/$1 [QSA,L]
