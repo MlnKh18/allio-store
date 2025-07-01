@@ -13,4 +13,12 @@ class UserController
     {
         return $this->userService->handleGetAllUser();
     }
+    public function handleGetUserByEmail($email)
+    {
+        return $this->userService->handleGetUserByEmail($email);
+    }
+    public function handleDeleteUserById($id)
+    {
+        return $this->userService->handleDeleteUserById($id);
+    }
 }

@@ -33,7 +33,7 @@ class authService
         if (!password_verify($password, $user['password'])) {
             return [
                 'status' => 'error',
-                'code' => 401,
+                'code' => 404,
                 'message' => 'Email atau password salah'
             ];
         }
