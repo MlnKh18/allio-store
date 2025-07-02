@@ -6,7 +6,7 @@ RewriteBase /toko-online-allinone/
 RewriteRule ^login$ views/auth/loginScreen.php [L]
 RewriteRule ^register$ views/Auth/registerScreen.php [L]
 RewriteRule ^home$ views/Home/homeScreen.php [L]
-# RewriteRule ^pemasukan$ views/Pemasukan/pemasukanScreen.php [L]
+RewriteRule ^cart$ views/cart/cartScreen.php [L]
 # RewriteRule ^pengeluaran$ views/Pengeluaran/pengeluaranScreen.php [L]
 
 # # Untuk backend, pastikan permintaan menuju index.php untuk diproses lebih lanjut

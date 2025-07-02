@@ -29,41 +29,6 @@ require_once(__DIR__ . '/../includes/header.php');
                 <button type="button" id="search-button" class="product-search-button">Cari</button>
             </div>
             <div class="c-product-list" id="product-list">
-                <div class="c-product-item">
-                    <img src="https://tse1.mm.bing.net/th/id/OIP._0_1TXtCIlRr9VvNhegWYAHaHa?pid=Api" alt="Produk 1">
-                    <h4>Baju Kaos</h4>
-                    <p>Deskripsi singkat tentang Baju Kaos.</p>
-                    <span>Harga: Rp 100.000</span>
-                    <button>Tambah ke Keranjang</button>
-                </div>
-                <div class="c-product-item">
-                    <img src="https://tse1.mm.bing.net/th/id/OIP._0_1TXtCIlRr9VvNhegWYAHaHa?pid=Api" alt="Produk 1">
-                    <h4>Baju Kaos</h4>
-                    <p>Deskripsi singkat tentang Baju Kaos.</p>
-                    <span>Harga: Rp 100.000</span>
-                    <button>Tambah ke Keranjang</button>
-                </div>
-                <div class="c-product-item">
-                    <img src="https://tse1.mm.bing.net/th/id/OIP._0_1TXtCIlRr9VvNhegWYAHaHa?pid=Api" alt="Produk 1">
-                    <h4>Baju Kaos</h4>
-                    <p>Deskripsi singkat tentang Baju Kaos.</p>
-                    <span>Harga: Rp 100.000</span>
-                    <button>Tambah ke Keranjang</button>
-                </div>
-                <div class="c-product-item">
-                    <img src="https://tse1.mm.bing.net/th/id/OIP._0_1TXtCIlRr9VvNhegWYAHaHa?pid=Api" alt="Produk 1">
-                    <h4>Baju Kaos</h4>
-                    <p>Deskripsi singkat tentang Baju Kaos.</p>
-                    <span>Harga: Rp 100.000</span>
-                    <button>Tambah ke Keranjang</button>
-                </div>
-                <div class="c-product-item">
-                    <img src="https://tse1.mm.bing.net/th/id/OIP._0_1TXtCIlRr9VvNhegWYAHaHa?pid=Api" alt="Produk 1">
-                    <h4>Baju Kaos</h4>
-                    <p>Deskripsi singkat tentang Baju Kaos.</p>
-                    <span>Harga: Rp 100.000</span>
-                    <button>Tambah ke Keranjang</button>
-                </div>
             </div>
         </div>
     </section>

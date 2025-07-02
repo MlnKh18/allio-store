@@ -263,9 +263,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'message' => 'Category ID is required'
             ]);
         }
-    } else if ($page === 'backend/getCartByUserId') {
-        if (isset($_GET['id'])) {
-            $userId = intval($_GET['id']);
+    } else if (strpos($page, 'backend/getCartByUserId') === 0) {
+        // Pisahkan $page jadi array berdasarkan '/'
+        $parts = explode('/', $page);
+
+        // Cek apakah ada parameter userId di $parts[2]
+        if (isset($parts[2])) {
+            $userId = intval($parts[2]);
 
             // Validasi input
             if ($userId <= 0) {
@@ -378,7 +382,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userId = isset($inputData['user_id']) ? intval($inputData['user_id']) : 0;
         $productId = isset($inputData['product_id']) ? intval($inputData['product_id']) : 0;
 
-        // Validasi input
         if ($userId <= 0 || $productId <= 0) {
             echo json_encode([
                 'status' => 'error',
@@ -388,10 +391,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // Menangani penghapusan produk dari keranjang
         $cartController = new CartController();
         $response = $cartController->deleteProductFromCart($userId, $productId);
-        echo json_encode($response);
+        echo json_encode($response);  // PASTIKAN INI ADA
     } else if ($page === 'backend/clearCart') {
         $inputData = json_decode(file_get_contents('php://input'), true);
         $userId = isset($inputData['user_id']) ? intval($inputData['user_id']) : 0;
