@@ -1,6 +1,5 @@
 <?php
 require_once(__DIR__ . '/../services/userService.php');
-require_once(__DIR__ . '/../models/userModel.php');
 
 class UserController
 {
@@ -16,6 +15,10 @@ class UserController
     public function handleGetUserByEmail($email)
     {
         return $this->userService->handleGetUserByEmail($email);
+    }
+    public function handleGetUserById($id)
+    {
+        return $this->userService->handleGetUserById($id);
     }
     public function handleDeleteUserById($id)
     {

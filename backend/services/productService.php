@@ -167,6 +167,22 @@ class ProductService
                 'message' => 'Invalid product ID'
             ];
         }
+        $executeId = $this->userModel->getProductById($id);
+        if ($executeId->num_rows === 0) {
+            return [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Product not found'
+            ];
+        }
+        $executeCategory = $this->adminModel->getCategoryById($categoryId);
+        if ($executeCategory->num_rows === 0) {
+            return [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Category not found'
+            ];
+        }
 
         if (empty($name) || empty($price) || empty($description) || empty($image) || empty($categoryId)) {
             return [

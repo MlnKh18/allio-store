@@ -9,23 +9,119 @@ class CartService
         $this->userModel = new UserModel();
     }
 
-    public function getCartByUserId($userId)
+    public function getCartItemsByUserId($userId)
     {
-        return $this->userModel->getCartByUserId($userId);
+        if (empty($userId)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid user ID'
+            ];
+        }
+        $result = $this->userModel->getCartItemsByUserId($userId);
+        if ($result === false) {
+            return [
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'Failed to retrieve cart items'
+            ];
+        }
+        if ($result->num_rows > 0) {
+            $cartItems = [];
+            while ($row = $result->fetch_assoc()) {
+                $cartItems[] = $row;
+            }
+            return [
+                'status' => 'success',
+                'code' => 200,
+                'data' => $cartItems
+            ];
+        }
+        return [
+            'status' => 'error',
+            'code' => 404,
+            'message' => 'No items found in cart'
+        ];
     }
 
-    public function getProductInCartUser($userId, $productId)
-    {
-        return $this->userModel->getProductInCartUser($userId, $productId);
-    }
 
     public function addProductToCartUser($userId, $productId, $quantity)
     {
-        return $this->userModel->addProductToCartUser($userId, $productId, $quantity);
+        if (empty($userId) || empty($productId) || empty($quantity)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid input'
+            ];
+        }
+        $resultIdUser = $this->userModel->getUserById($userId);
+        if ($resultIdUser->num_rows === 0) {
+            return [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'User not found'
+            ];
+        }
+        $resultIdProduct = $this->userModel->getProductById($productId);
+        if ($resultIdProduct->num_rows === 0) {
+            return [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Product not found'
+            ];
+        }
+        $result = $this->userModel->addProductToCartUser($userId, $productId, $quantity);
+        if ($result) {
+            return [
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Product added to cart successfully'
+            ];
+        }
+        return [
+            'status' => 'error',
+            'code' => 500,
+            'message' => 'Failed to add product to cart'
+        ];
     }
 
     public function deleteProductFromCartUser($userId, $productId)
     {
-        return $this->userModel->deleteProductFromCartUser($userId, $productId);
+        if (empty($userId) || empty($productId)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid input'
+            ];
+        }
+        $resultIdUser = $this->userModel->getUserById($userId);
+        if ($resultIdUser->num_rows === 0) {
+            return [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'User not found'
+            ];
+        }
+        $resultIdProduct = $this->userModel->getProductById($productId);
+        if ($resultIdProduct->num_rows === 0) {
+            return [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Product not found'
+            ];
+        }
+        $result = $this->userModel->deleteProductFromCartUser($userId, $productId);
+        if ($result) {
+            return [
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Product removed from cart successfully'
+            ];
+        }
+        return [
+            'status' => 'error',
+            'code' => 500,
+            'message' => 'Failed to remove product from cart'
+        ];
     }
 }

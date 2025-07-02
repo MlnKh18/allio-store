@@ -54,7 +54,7 @@ class UserModel
 
     public function getProductById($id)
     {
-        $sql = "SELECT * FROM products WHERE id_product = ?";
+        $sql = "SELECT * FROM products WHERE product_id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -62,32 +62,24 @@ class UserModel
     }
 
     // ===============================================================================================================Cart
-    public function getCartByUserId($userId)
+    public function getCartItemsByUserId($userId)
     {
-        $sql = "SELECT p.*, c.quantity FROM product p JOIN cart c ON p.id_product = c.product_id WHERE c.user_id = ?";
+        $sql = "SELECT p.*, c.quantity FROM products p JOIN cart_items c ON p.product_id = c.product_id WHERE c.user_id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $userId);
         $stmt->execute();
         return $stmt->get_result();
     }
-    public function getProductInCartUser($userId, $productId)
-    {
-        $sql = "SELECT p.*, c.quantity FROM product p JOIN cart c ON p.id_product = c.product_id WHERE c.user_id = ? AND c.product_id = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ii", $userId, $productId);
-        $stmt->execute();
-        return $stmt->get_result();
-    }
     public function addProductToCartUser($userId, $productId, $quantity)
     {
-        $sql = "INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("iii", $userId, $productId, $quantity);
         return $stmt->execute();
     }
     public function deleteProductFromCartUser($userId, $productId)
     {
-        $sql = "DELETE FROM cart WHERE user_id = ? AND product_id = ?";
+        $sql = "DELETE FROM cart_items WHERE user_id = ? AND product_id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $userId, $productId);
         return $stmt->execute();

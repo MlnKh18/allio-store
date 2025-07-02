@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__ . '/../models/adminModel.php');
 require_once(__DIR__ . '/../services/categoryService.php');
 
 class CategoryController

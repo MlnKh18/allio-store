@@ -28,20 +28,20 @@ class AdminModel
         return $stmt->get_result();
     }
     public function getCategoryById($id)
-{
-    $sql = "SELECT * FROM categories WHERE category_id = ?";
-    $stmt = $this->conn->prepare($sql);
-    if (!$stmt) {
-        die("Prepare failed: " . $this->conn->error);
-    }
+    {
+        $sql = "SELECT * FROM categories WHERE category_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $this->conn->error);
+        }
 
-    $stmt->bind_param("i", $id);
-    if (!$stmt->execute()) {
-        die("Execute failed: " . $stmt->error);
-    }
+        $stmt->bind_param("i", $id);
+        if (!$stmt->execute()) {
+            die("Execute failed: " . $stmt->error);
+        }
 
-    return $stmt->get_result();
-}
+        return $stmt->get_result();
+    }
 
     public function addCategory($name)
     {
@@ -71,7 +71,7 @@ class AdminModel
     {
         $sql = "UPDATE products SET name_product = ?, price = ?, description = ?, image_url = ?, category_id = ? WHERE product_id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sdssi", $name, $price, $description, $image, $categoryId, $id);
+        $stmt->bind_param("ssdsii", $name, $price, $description, $image, $categoryId, $id);
         return $stmt->execute();
     }
 
