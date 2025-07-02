@@ -1,5 +1,5 @@
 const port = "8080";
-const baseUrl = `http://localhost:${port}/financial_management/`;
+const baseUrl = `http://localhost:${port}/toko-online-allinone/`;
 
 $(document).ready(function () {
   $("#loginForm").submit(function (e) {
@@ -25,7 +25,8 @@ $(document).ready(function () {
         if (response.status === "ok") {
           alert("Login berhasil!");
           localStorage.setItem("user", JSON.stringify(response.user));
-          window.location.href = "./home"
+        //   window.location.href = "./home"
+        alert("Redirecting to home...");
         } else {
           alert("Login gagal, email atau password salah!");
         }
@@ -52,7 +53,7 @@ $(document).ready(function () {
 
     // Menyusun data untuk registrasi dalam format JSON
     let data = JSON.stringify({
-      username: username,
+      name_user: username,
       email: email,
       password: password,
     });
