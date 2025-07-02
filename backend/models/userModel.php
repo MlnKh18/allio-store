@@ -9,7 +9,7 @@ class UserModel
         $this->conn = $conn;
     }
 
-    // User 
+    // ===============================================================================================================User 
     public function registerUser($username, $email, $password)
     {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
@@ -43,10 +43,10 @@ class UserModel
         return $stmt->get_result();
     }
 
-    // Product
+    // ===============================================================================================================Product
     public function getAllProducts()
     {
-        $sql = "SELECT * FROM product";
+        $sql = "SELECT * FROM products";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->get_result();
@@ -54,14 +54,14 @@ class UserModel
 
     public function getProductById($id)
     {
-        $sql = "SELECT * FROM product WHERE id_product = ?";
+        $sql = "SELECT * FROM products WHERE id_product = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
         return $stmt->get_result();
     }
 
-    // Cart
+    // ===============================================================================================================Cart
     public function getCartByUserId($userId)
     {
         $sql = "SELECT p.*, c.quantity FROM product p JOIN cart c ON p.id_product = c.product_id WHERE c.user_id = ?";

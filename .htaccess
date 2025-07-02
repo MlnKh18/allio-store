@@ -12,4 +12,4 @@ RewriteBase /toko-online-allinone/
 # # Untuk backend, pastikan permintaan menuju index.php untuk diproses lebih lanjut
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^backend/([a-zA-Z0-9_-]+)$ index.php?page=backend/$1 [QSA,L]
+RewriteRule ^backend/([a-zA-Z0-9_-]+)/?([0-9]*)$ index.php?page=backend/$1&id=$2 [QSA,L]

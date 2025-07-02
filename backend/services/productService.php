@@ -10,6 +10,7 @@ class ProductService
     public function __construct()
     {
         $this->userModel = new UserModel();
+        $this->adminModel = new AdminModel();
     }
 
     public function handleGetAllProducts()
@@ -87,7 +88,6 @@ class ProductService
     }
     public function handleAddProduct($name, $price, $description, $image, $categoryId)
     {
-        // Validasi input kosong
         if (empty($name) || empty($price) || empty($description) || empty($image) || empty($categoryId)) {
             return [
                 'status' => 'error',
@@ -96,7 +96,6 @@ class ProductService
             ];
         }
 
-        // Validasi nama minimal 3 karakter
         if (strlen($name) < 3) {
             return [
                 'status' => 'error',
@@ -105,7 +104,6 @@ class ProductService
             ];
         }
 
-        // Validasi harga angka positif
         if (!is_numeric($price) || $price <= 0) {
             return [
                 'status' => 'error',
@@ -114,7 +112,6 @@ class ProductService
             ];
         }
 
-        // Validasi categoryId angka
         if (!is_numeric($categoryId) || $categoryId <= 0) {
             return [
                 'status' => 'error',
@@ -123,19 +120,27 @@ class ProductService
             ];
         }
 
-        // Validasi ekstensi gambar (opsional, misal jpg/png/jpeg)
+        // Validasi apakah image adalah URL yang valid
+        if (!filter_var($image, FILTER_VALIDATE_URL)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Image must be a valid URL'
+            ];
+        }
+
+        // Optional: Validasi ekstensi gambar dari URL (jika tetap mau)
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-        $imageExtension = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+        $imageExtension = strtolower(pathinfo(parse_url($image, PHP_URL_PATH), PATHINFO_EXTENSION));
 
         if (!in_array($imageExtension, $allowedExtensions)) {
             return [
                 'status' => 'error',
                 'code' => 400,
-                'message' => 'Invalid image format. Allowed formats: jpg, jpeg, png, gif'
+                'message' => 'Image URL must point to a valid image file (jpg, jpeg, png, gif)'
             ];
         }
 
-        // Panggil model untuk menambahkan produk
         $result = $this->adminModel->addProduct($name, $price, $description, $image, $categoryId);
 
         if ($result) {
@@ -152,6 +157,88 @@ class ProductService
             ];
         }
     }
+
+    public function handleEditProduct($id, $name, $price, $description, $image, $categoryId)
+    {
+        if (empty($id)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid product ID'
+            ];
+        }
+
+        if (empty($name) || empty($price) || empty($description) || empty($image) || empty($categoryId)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'All fields are required'
+            ];
+        }
+
+        if (strlen($name) < 3) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Product name must be at least 3 characters'
+            ];
+        }
+
+        if (!is_numeric($price) || $price <= 0) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Price must be a positive number'
+            ];
+        }
+
+        if (!is_numeric($categoryId) || $categoryId <= 0) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid category ID'
+            ];
+        }
+
+        // Validasi apakah image adalah URL yang valid
+        if (!filter_var($image, FILTER_VALIDATE_URL)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Image must be a valid URL'
+            ];
+        }
+
+        // Optional: Validasi ekstensi gambar dari URL
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $imageExtension = strtolower(pathinfo(parse_url($image, PHP_URL_PATH), PATHINFO_EXTENSION));
+
+        if (!in_array($imageExtension, $allowedExtensions)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Image URL must point to a valid image file (jpg, jpeg, png, gif)'
+            ];
+        }
+
+        $result = $this->adminModel->editProduct($id, $name, $price, $description, $image, $categoryId);
+
+        if ($result) {
+            return [
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Product edited successfully'
+            ];
+        } else {
+            return [
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'Failed to edit product'
+            ];
+        }
+    }
+
+
     public function handleDeleteProductById($id)
     {
         // Validasi id kosong/null

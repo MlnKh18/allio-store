@@ -118,33 +118,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response = $categoryController->handleAddCategory($name);
         echo json_encode($response);
     }
-    if ($page === 'backend/getCategoryById') {
-        // Mengambil data dari body request
-        $inputData = json_decode(file_get_contents('php://input'), true);
-        $id = isset($inputData['id']) ? intval($inputData['id']) : 0;
-
-        // Validasi input
-        if ($id <= 0) {
-            echo json_encode([
-                'status' => 'error',
-                'code' => 400,
-                'message' => 'Invalid category ID'
-            ]);
-            exit;
-        }
-
-        // Menangani pengambilan kategori berdasarkan ID
-        $categoryController = new CategoryController();
-        $response = $categoryController->handleGetCategoryById($id);
-        echo json_encode($response);
-    }
     if ($page === 'backend/addProduct') {
         // Mengambil data dari body request
         $inputData = json_decode(file_get_contents('php://input'), true);
-        $name = isset($inputData['name']) ? trim($inputData['name']) : '';
+        $name = isset($inputData['name_product']) ? trim($inputData['name_product']) : '';
         $price = isset($inputData['price']) ? $inputData['price'] : '';
         $description = isset($inputData['description']) ? $inputData['description'] : '';
-        $image = isset($inputData['image']) ? $inputData['image'] : '';
+        $image = isset($inputData['image_url']) ? $inputData['image_url'] : '';
         $categoryId = isset($inputData['categoryId']) ? $inputData['categoryId'] : '';
 
         // Validasi input
@@ -177,12 +157,94 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $categoryController = new CategoryController();
         $response = $categoryController->handleGetAllCategories();
         echo json_encode($response);
+    } else if ($page === 'backend/getAllProduct') {
+        $productController = new ProductController();
+        $response = $productController->handleGetAllProducts();
+        echo json_encode($response);
+    } else if ($page === 'backend/getProductById') {
+        $inputData = json_decode(file_get_contents('php://input'), true);
+        $id = isset($inputData['id']) ? intval($inputData['id']) : 0;
+
+        // Validasi input
+        if ($id <= 0) {
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid product ID'
+            ]);
+            exit;
+        }
+
+        $response = $productController->handleGetProductById($id);
+        echo json_encode($response);
+    } else if ($page === 'backend/getUserById') {
+        $inputData = json_decode(file_get_contents('php://input'), true);
+        $id = isset($inputData['user_id']) ? intval($inputData['user_id']) : 0;
+
+        // Validasi input
+        if ($id <= 0) {
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid user ID'
+            ]);
+            exit;
+        }
+
+        $userController = new UserController();
+        $response = $userController->handleDeleteUserById($id);
+        echo json_encode($response);
+    } else if ($page === 'backend/getCategoryById') {
+    if (isset($_GET['id'])) {
+        $id = intval($_GET['id']);
+
+        if ($id <= 0) {
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid category ID'
+            ]);
+            exit;
+        }
+
+        $categoryController = new CategoryController();
+        $response = $categoryController->handleGetCategoryById($id);
+        echo json_encode($response);
     } else {
         echo json_encode([
             'status' => 'error',
-            'code' => 404,
-            'message' => 'Halaman tidak ditemukan'
+            'code' => 400,
+            'message' => 'Category ID is required'
         ]);
+    }
+}
+
+} else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+    $page = isset($_GET['page']) ? $_GET['page'] : '';
+
+    if ($page === 'backend/updateProductById') {
+        $inputData = json_decode(file_get_contents('php://input'), true);
+        $id = isset($inputData['product_id']) ? intval($inputData['product_id']) : 0;
+        $name = isset($inputData['name_product']) ? trim($inputData['name_product']) : '';
+        $price = isset($inputData['price']) ? floatval($inputData['price']) : 0;
+        $description = isset($inputData['description']) ? trim($inputData['description']) : '';
+        $image = isset($inputData['image_url']) ? trim($inputData['image_url']) : '';
+        $categoryId = isset($inputData['categoryId']) ? intval($inputData['categoryId']) : 0;
+
+        // Validasi input
+        if ($id <= 0 || empty($name) || $price <= 0 || empty($description) || empty($image) || $categoryId <= 0) {
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid input data'
+            ]);
+            exit;
+        }
+
+        // Menangani pembaruan produk berdasarkan ID
+        $productController = new ProductController();
+        $response = $productController->handleUpdateProduct($id, $name, $price, $description, $image, $categoryId);
+        echo json_encode($response);
     }
 } else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $page = isset($_GET['page']) ? $_GET['page'] : '';

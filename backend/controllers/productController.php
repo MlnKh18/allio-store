@@ -27,11 +27,10 @@ class ProductController
         return $this->productService->handleAddProduct($name, $price, $description, $image, $categoryId);
     }
 
-    // public function handleUpdateProduct($id, $data)
-    // {
-    //     return $this->productService->handleUpdateProduct($id, $data);
-    // }
-
+    public function handleUpdateProduct($id, $name, $price, $description, $image, $categoryId)
+    {
+        return $this->productService->handleEditProduct($id, $name, $price, $description, $image, $categoryId);
+    }
     public function handleDeleteProduct($id)
     {
         return $this->productService->handleDeleteProductById($id);

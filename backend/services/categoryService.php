@@ -45,14 +45,14 @@ class CategoryService
             ];
         }
         $result = $this->adminModel->getCategoryById($id);
-        if ($result->num_rows > 0) {
+        if ($result && is_object($result) && $result->num_rows > 0) {
             return [
                 'status' => 'ok',
                 'message' => 'Category retrieved successfully',
                 'category' => $result->fetch_assoc()
             ];
         }
-        if ($result->num_rows === 0) {
+        if ($result && is_object($result) && $result->num_rows === 0) {
             return [
                 'status' => 'error',
                 'code' => 404,
