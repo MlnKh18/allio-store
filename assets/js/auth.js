@@ -11,8 +11,6 @@ $(document).ready(function () {
       alert("Email dan password harus diisi!");
       return;
     }
-    console.info(email, password);
-
     let data = JSON.stringify({ email: email, password: password });
 
     $.ajax({
@@ -20,13 +18,13 @@ $(document).ready(function () {
       type: "POST",
       contentType: "application/json", // Menetapkan content type sebagai JSON
       data: data, // Mengirimkan data dalam format JSON
+      dataType: "json", // Menetapkan tipe data yang diharapkan dari server
       success: function (response) {
         console.log(response);
         if (response.status === "ok") {
           alert("Login berhasil!");
           localStorage.setItem("user", JSON.stringify(response.user));
-        //   window.location.href = "./home"
-        alert("Redirecting to home...");
+          window.location.href = "./home";
         } else {
           alert("Login gagal, email atau password salah!");
         }

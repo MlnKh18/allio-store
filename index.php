@@ -5,6 +5,7 @@ require_once(__DIR__ . '/backend/controllers/userController.php');
 require_once(__DIR__ . '/backend/controllers/productController.php');
 require_once(__DIR__ . '/backend/controllers/categoryController.php');
 require_once(__DIR__ . '/backend/controllers/cartController.php');
+require_once(__DIR__ . '/backend/controllers/orderController.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $page = isset($_GET['page']) ? $_GET['page'] : '';
