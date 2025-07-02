@@ -6,7 +6,7 @@ session_start();
 
 function isUserLoggedIn()
 {
-    return isset($_SESSION['id_pegawai']);
+    return isset($_SESSION['user_id']);
 }
 function checkAuth()
 {

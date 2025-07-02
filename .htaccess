@@ -3,7 +3,7 @@ RewriteEngine On
 RewriteBase /toko-online-allinone/
 
 # Arahkan permintaan frontend ke file yang sesuai di views/
-# RewriteRule ^login$ views/Auth/loginScreen.php [L]
+RewriteRule ^login$ views/auth/loginScreen.php [L]
 # RewriteRule ^register$ views/Auth/registerScreen.php [L]
 # RewriteRule ^home$ views/Home/homeScreen.php [L]
 # RewriteRule ^pemasukan$ views/Pemasukan/pemasukanScreen.php [L]

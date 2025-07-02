@@ -24,4 +24,8 @@ class CartController
     {
         return $this->cartService->deleteProductFromCartUser($userId, $productId);
     }
+    public function clearCart($userId)
+    {
+        return $this->cartService->clearCart($userId);
+    }
 }

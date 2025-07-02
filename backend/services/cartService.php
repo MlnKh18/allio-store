@@ -124,4 +124,27 @@ class CartService
             'message' => 'Failed to remove product from cart'
         ];
     }
+    public function clearCart($userId)
+    {
+        if (empty($userId)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid user ID'
+            ];
+        }
+        $result = $this->userModel->deleteAllProductFromCartUser($userId);
+        if ($result) {
+            return [
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Cart cleared successfully'
+            ];
+        }
+        return [
+            'status' => 'error',
+            'code' => 500,
+            'message' => 'Failed to clear cart'
+        ];
+    }
 }

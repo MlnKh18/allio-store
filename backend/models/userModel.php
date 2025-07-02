@@ -84,4 +84,50 @@ class UserModel
         $stmt->bind_param("ii", $userId, $productId);
         return $stmt->execute();
     }
+    public function deleteAllProductFromCartUser($userId)
+    {
+        $sql = "DELETE FROM cart_items WHERE user_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        return $stmt->execute();
+    }
+
+    // ===============================================================================================================Order
+    public function createOrder($userId, $totalAmount)
+    {
+        $sql = "INSERT INTO orders (user_id, total_amount, status, created_at) VALUES (?, ?, 'pending', NOW())";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("id", $userId, $totalAmount);
+
+        if ($stmt->execute()) {
+            // Kembalikan order_id hasil insert
+            return $this->conn->insert_id;
+        } else {
+            return false;
+        }
+    }
+
+    public function createOrderItem($orderId, $productId, $quantity, $price)
+    {
+        $sql = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("iiid", $orderId, $productId, $quantity, $price);
+        return $stmt->execute();
+    }
+
+    public function getOrderHistoryByUserId($userId)
+    {
+        $sql = "SELECT * FROM orders WHERE user_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+    public function deleteOrderHistoryByUserId($id)
+    {
+        $sql = "DELETE FROM orders WHERE user_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
 }

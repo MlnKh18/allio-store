@@ -183,6 +183,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response = $cartController->addProductToCart($userId, $productId, $quantity);
         echo json_encode($response);
     }
+    if ($page === 'backend/checkout') {
+        // Mengambil data dari body request
+        $inputData = json_decode(file_get_contents('php://input'), true);
+        $userId = isset($inputData['user_id']) ? intval($inputData['user_id']) : 0;
+        $totalAmount = isset($inputData['total_amount']) ? floatval($inputData['total_amount']) : 0;
+
+        // Validasi input
+        if ($userId <= 0 || $totalAmount <= 0) {
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid user ID or total amount'
+            ]);
+            exit;
+        }
+
+        // Menangani checkout menggunakan OrderService
+        $orderController = new OrderController();
+        $response = $orderController->handleCheckout($userId, $totalAmount);
+        echo json_encode($response);
+    }
 } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $page = isset($_GET['page']) ? $_GET['page'] : '';
 
@@ -369,6 +390,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Menangani penghapusan produk dari keranjang
         $cartController = new CartController();
         $response = $cartController->deleteProductFromCart($userId, $productId);
+        echo json_encode($response);
+    } else if ($page === 'backend/clearCart') {
+        $inputData = json_decode(file_get_contents('php://input'), true);
+        $userId = isset($inputData['user_id']) ? intval($inputData['user_id']) : 0;
+
+        // Validasi input
+        if ($userId <= 0) {
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid user ID'
+            ]);
+            exit;
+        }
+
+        // Menangani pembersihan keranjang
+        $cartController = new CartController();
+        $response = $cartController->clearCart($userId);
         echo json_encode($response);
     }
 }
