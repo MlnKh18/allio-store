@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../models/userModel.php');
+require_once(__DIR__ . '/../models/adminModel.php');
 class UserService
 {
     private $userModel;
@@ -93,6 +94,44 @@ class UserService
             ]
         ];
     }
+
+public function handleEditUser($id, $name = null, $email = null, $roleId = null)
+{
+    if (empty($id) || !is_numeric($id)) {
+        return [
+            'status'  => 'error',
+            'code'    => 400,
+            'message' => 'Invalid user ID'
+        ];
+    }
+
+    $existingUser = $this->userModel->getUserById($id);
+    if ($existingUser->num_rows === 0) {
+        return [
+            'status'  => 'error',
+            'code'    => 404,
+            'message' => 'User not found'
+        ];
+    }
+
+    $result = $this->adminModel->updateUser($id, $name, $email, $roleId);
+
+    if ($result) {
+        return [
+            'status'  => 'ok',
+            'message' => 'User updated successfully'
+        ];
+    } else {
+        return [
+            'status'  => 'error',
+            'code'    => 500,
+            'message' => 'Failed to update user'
+        ];
+    }
+}
+
+
+
     public function handleDeleteUserById($id)
     {
         if (empty($id) || !is_numeric($id)) {

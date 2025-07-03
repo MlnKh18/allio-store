@@ -10,7 +10,47 @@ class AdminModel
     }
 
     // =============================================================================================================== User
+    public function updateUser($id, $name = null, $email = null, $roleId = null)
+    {
+        $fields = [];
+        $params = [];
+        $types  = "";
 
+        if (!empty($name)) {
+            $fields[] = "name_user = ?";
+            $params[] = $name;
+            $types .= "s";
+        }
+
+        if (!empty($email)) {
+            $fields[] = "email = ?";
+            $params[] = $email;
+            $types .= "s";
+        }
+
+        if (!empty($roleId)) {
+            $fields[] = "role_id = ?";
+            $params[] = $roleId;
+            $types .= "i";
+        }
+
+        if (empty($fields)) {
+            return false;
+        }
+
+        $params[] = $id;
+        $types   .= "i";
+
+        $sql = "UPDATE users SET " . implode(", ", $fields) . " WHERE user_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            return false;
+        }
+
+        $stmt->bind_param($types, ...$params);
+
+        return $stmt->execute();
+    }
     public function deleteUserById($id)
     {
         $sql = "DELETE FROM users WHERE user_id = ?";
@@ -50,6 +90,21 @@ class AdminModel
         $stmt->bind_param("s", $name);
         return $stmt->execute();
     }
+    public function editCategory($id, $name)
+    {
+        $sql = "UPDATE categories SET name_category = ? WHERE category_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $this->conn->error);
+        }
+
+        $stmt->bind_param("si", $name, $id);
+        if (!$stmt->execute()) {
+            die("Execute failed: " . $stmt->error);
+        }
+
+        return true;
+    }
     public function deleteCategoryById($id)
     {
         $sql = "DELETE FROM categories WHERE category_id = ?";
@@ -75,11 +130,20 @@ class AdminModel
         return $stmt->execute();
     }
 
-    public function deleteProduct($id)
+    public function deleteProduct($product_id)
     {
-        $sql = "DELETE FROM products WHERE product_id = ?";
+        // Hapus dulu item di cart yang terkait product ini
+        $sql = "DELETE FROM cart_items WHERE product_id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id);
-        return $stmt->execute();
+        $stmt->bind_param("i", $product_id);
+        $stmt->execute();
+
+        // Baru hapus product-nya
+        $query = "DELETE FROM products WHERE product_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $product_id);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
     }
 }

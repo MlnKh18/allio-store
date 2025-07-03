@@ -31,9 +31,9 @@ class ProductController
     {
         return $this->productService->handleEditProduct($id, $name, $price, $description, $image, $categoryId);
     }
-    public function handleDeleteProduct($id)
+    public function handleDeleteProduct($product_id)
     {
-        return $this->productService->handleDeleteProductById($id);
+        return $this->productService->handleDeleteProductById($product_id);
     }
 }
 ?>

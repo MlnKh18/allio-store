@@ -20,6 +20,10 @@ class UserController
     {
         return $this->userService->handleGetUserById($id);
     }
+    public function handleEditUser($id, $name, $email, $roleId)
+    {
+        return $this->userService->handleEditUser($id, $name, $email, $roleId);
+    }
     public function handleDeleteUserById($id)
     {
         return $this->userService->handleDeleteUserById($id);

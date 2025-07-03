@@ -14,6 +14,8 @@ checkAuth();
     <!-- CSS Global -->
     <link rel="stylesheet" href="./assets/css/style.css">
 
+
+
     <!-- CSS Dinamis Berdasarkan Halaman -->
     <?php if (isset($pageStyle)) : ?>
         <link rel="stylesheet" href="./assets/css/<?php echo $pageStyle; ?>">
@@ -28,16 +30,30 @@ checkAuth();
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <!-- JS Global -->
+    <script src="./assets/js/script.js"></script>
+
+
 </head>
 
 <body>
-    <div class="c-content">
+    <div class="c-content" id="c-content-user">
         <header>
             <h3>Halo, <?php echo $_SESSION['name_user']; ?></h3>
             <ul>
                 <li><a href="./cart"><i class="fa-solid fa-cart-shopping"></i></a></li>
                 <li><a href="./historyOrder"><i class="fa-solid fa-clock-rotate-left"></i></a></li>
                 <li><a href="./#"><i class="fa-solid fa-user"></i></a></li>
+                <div id="popup-profile" class="popup-profile">
+                    <div class="popup-content">
+                        <p>Nama: <span id="profile-name"></span></p>
+                        <p>Email: <span id="profile-email"></span></p>
+                        <div class="c-button">
+                            <button type="button" id="btn-close-profile">Tutup</button>
+                            <button type="button" id="btn-logout">Logout</button>
+                        </div>
+                    </div>
+                </div>
             </ul>
         </header>
         <main>

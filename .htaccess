@@ -8,6 +8,9 @@ RewriteRule ^register$ views/Auth/registerScreen.php [L]
 RewriteRule ^home$ views/Home/homeScreen.php [L]
 RewriteRule ^cart$ views/cart/cartScreen.php [L]
 RewriteRule ^historyOrder$ views/history/historyScreen.php [L]
+RewriteRule ^user-dashboard$ views/admin/user-dashboard.php [L]
+RewriteRule ^category-dashboard$ views/admin/category-dashboard.php [L]
+
 
 # # Untuk backend, pastikan permintaan menuju index.php untuk diproses lebih lanjut
 RewriteCond %{REQUEST_FILENAME} !-f

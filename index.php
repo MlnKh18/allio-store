@@ -325,6 +325,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $page = isset($_GET['page']) ? $_GET['page'] : '';
+    if ($page === 'backend/updateCategoryById') {
+        $inputData = json_decode(file_get_contents('php://input'), true);
+        $id = isset($inputData['id']) ? intval($inputData['id']) : 0;
+        $name = isset($inputData['name_category']) ? trim($inputData['name_category']) : '';
+
+        if ($id <= 0 || empty($name)) {
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid input data'
+            ]);
+            exit;
+        }
+
+        $categoryController = new CategoryController();
+        $response = $categoryController->handleUpdateCategory($id, ['name_category' => $name]);
+        echo json_encode($response);
+    }
+
 
     if ($page === 'backend/updateProductById') {
         $inputData = json_decode(file_get_contents('php://input'), true);
@@ -348,6 +367,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Menangani pembaruan produk berdasarkan ID
         $productController = new ProductController();
         $response = $productController->handleUpdateProduct($id, $name, $price, $description, $image, $categoryId);
+        echo json_encode($response);
+    }
+} else if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+    $page = isset($_GET['page']) ? $_GET['page'] : '';
+
+    if ($page === 'backend/editUserById') {
+        $inputData = json_decode(file_get_contents('php://input'), true);
+
+        $id     = isset($inputData['user_id']) ? intval($inputData['user_id']) : 0;
+        $name   = isset($inputData['name_user']) ? trim($inputData['name_user']) : null;
+        $email  = isset($inputData['email']) ? trim($inputData['email']) : null;
+        $roleId = isset($inputData['role_id']) ? intval($inputData['role_id']) : null;
+
+        if ($id <= 0) {
+            echo json_encode([
+                'status' => 'error',
+                'code'   => 400,
+                'message' => 'Invalid user ID'
+            ]);
+            exit;
+        }
+
+        $userController = new UserController();
+        $response = $userController->handleEditUser($id, $name, $email, $roleId);
         echo json_encode($response);
     }
 } else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
@@ -391,10 +434,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($response);
     } else if ($page === 'backend/deleteProductById') {
         $inputData = json_decode(file_get_contents('php://input'), true);
-        $id = isset($inputData['product_id']) ? intval($inputData['product_id']) : 0;
+        $product_id = isset($inputData['product_id']) ? intval($inputData['product_id']) : 0;
 
         // Validasi input
-        if ($id <= 0) {
+        if ($product_id <= 0) {
             echo json_encode([
                 'status' => 'error',
                 'code' => 400,
@@ -405,7 +448,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Menangani penghapusan produk berdasarkan ID
         $productController = new ProductController();
-        $response = $productController->handleDeleteProduct($id);
+        $response = $productController->handleDeleteProduct($product_id);
         echo json_encode($response);
     } else if ($page === 'backend/deleteProductFromCart') {
         $inputData = json_decode(file_get_contents('php://input'), true);

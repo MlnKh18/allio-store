@@ -27,10 +27,16 @@ body {
 }
 
 .c-content {
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
   background: #f6f6f6;
+}
+#c-content-user {
+  display: flex;
+  flex-direction: column;
+}
+
+#c-content-admin {
+  display: flex;
 }
 
 .c-content header {
@@ -84,6 +90,7 @@ body {
 
 .c-content main {
   width: 100%;
+  min-height: 80vh;
 }
 
 footer {
@@ -94,6 +101,67 @@ footer {
   padding: 5px;
   color: var(--white-color);
   background-color: var(--footer-bg-color);
+}
+
+/* Popup overlay */
+#popup-profile {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  overflow: auto;
+}
+
+/* Popup box */
+#popup-profile .popup-content {
+  background: #fff;
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 30px 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease;
+  text-align: center;
+}
+
+#popup-profile h3 {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+#popup-profile p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+#popup-profile button {
+  margin-top: 20px;
+  padding: 8px 18px;
+  border: none;
+  background: #2a8cff;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#popup-profile button:hover {
+  background: #1a6cd4;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 480px) {

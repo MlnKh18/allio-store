@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/../models/adminModel.php');
 
+
 class CategoryService
 {
     private $adminModel;
@@ -106,10 +107,77 @@ class CategoryService
         }
     }
 
-    // public function handleUpdateCategory($id, $data)
-    // {
-    //     return $this->adminModel->updateCategory($id, $data);
-    // }
+    public function handleUpdateCategory($id, $data)
+    {
+        // Validasi ID
+        if (empty($id) || !is_numeric($id)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid category ID'
+            ];
+        }
+
+        // Validasi data input
+        if (!is_array($data) || !array_key_exists('name_category', $data) || is_null($data['name_category'])) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid input data'
+            ];
+        }
+
+        $name = trim($data['name_category']);
+        if (empty($name)) {
+            return [
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Category name cannot be empty'
+            ];
+        }
+
+        // Cek apakah kategori dengan ID tersebut ada
+        $existingCategory = $this->adminModel->getCategoryById($id);
+        if (!$existingCategory || !is_object($existingCategory) || $existingCategory->num_rows === 0) {
+            return [
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Category not found'
+            ];
+        }
+
+        // Cek apakah nama kategori sudah digunakan oleh kategori lain
+        $allCategories = $this->adminModel->getAllCategories();
+        if ($allCategories && $allCategories->num_rows > 0) {
+            while ($row = $allCategories->fetch_assoc()) {
+                if (
+                    strcasecmp(trim($row['name_category']), $name) === 0 &&
+                    intval($row['id_category']) !== intval($id)
+                ) {
+                    return [
+                        'status' => 'error',
+                        'code' => 409,
+                        'message' => 'Category name already exists'
+                    ];
+                }
+            }
+        }
+
+        // Update kategori
+        $result = $this->adminModel->editCategory($id, $name);
+        if ($result) {
+            return [
+                'status' => 'ok',
+                'message' => 'Category updated successfully'
+            ];
+        } else {
+            return [
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'An error occurred while updating the category'
+            ];
+        }
+    }
 
     public function handleDeleteCategoryById($id)
     {

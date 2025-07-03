@@ -25,10 +25,10 @@ class CategoryController
         return $this->categoryService->handleAddCategory($name);
     }
 
-    // public function handleUpdateCategory($id, $data)
-    // {
-    //     return $this->categoryService->handleUpdateCategory($id, $data);
-    // }
+    public function handleUpdateCategory($id, $data)
+    {
+        return $this->categoryService->handleUpdateCategory($id, $data);
+    }
 
     public function handleDeleteCategory($id)
     {

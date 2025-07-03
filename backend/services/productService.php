@@ -255,10 +255,10 @@ class ProductService
     }
 
 
-    public function handleDeleteProductById($id)
+    public function handleDeleteProductById($product_id)
     {
         // Validasi id kosong/null
-        if (empty($id)) {
+        if (empty($product_id)) {
             return [
                 'status' => 'error',
                 'code' => 400,
@@ -267,7 +267,7 @@ class ProductService
         }
 
         // Panggil model untuk menghapus produk
-        $result = $this->adminModel->deleteProduct($id);
+        $result = $this->adminModel->deleteProduct($product_id);
 
         if ($result) {
             return [

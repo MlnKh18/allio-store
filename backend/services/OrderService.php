@@ -1,19 +1,16 @@
 <?php
 require_once(__DIR__ . '/../models/userModel.php');
-require_once(__DIR__ . '/../services/cartService.php');
 
 class OrderService
 {
     private $userModel;
-    private $cartService;
 
     public function __construct()
     {
         $this->userModel = new UserModel();
-        $this->cartService = new CartService();
     }
 
-    public function handleCheckout($userId, $totalAmount)
+    public function handleCheckout($userId, $totalAmount, $paymentMethod)
     {
         // Create a new order
         $orderId = $this->userModel->createOrder($userId, $totalAmount);
@@ -57,6 +54,15 @@ class OrderService
             ];
         }
 
+        $paymentResult = $this->userModel->createPayment($orderId, $paymentMethod);
+        if (!$paymentResult) {
+            return [
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'Failed to create payment'
+            ];
+        }
+
         // Clear the cart
         $this->userModel->deleteProductFromCartUser($userId, null);
 
@@ -72,5 +78,89 @@ class OrderService
             ]
         ];
     }
+    public function handleGetOrderHistory($userId)
+    {
+        // Get order history for the user
+        $orderHistory = $this->userModel->getOrderHistoryWithPaymentByUserId($userId);
+        if ($orderHistory->num_rows === 0) {
+            return [
+                'status' => 'error',
+                'code'   => 404,
+                'message' => 'No order history found'
+            ];
+        }
 
+        $orders = [];
+        while ($order = $orderHistory->fetch_assoc()) {
+            // Dapatkan order items untuk order_id ini
+            $orderItemsResult = $this->userModel->getOrderItemsByOrderId($order['order_id']);
+            $orderItems = [];
+
+            if ($orderItemsResult->num_rows > 0) {
+                while ($item = $orderItemsResult->fetch_assoc()) {
+                    $orderItems[] = [
+                        'product_id'   => (int)$item['product_id'],
+                        'product_name' => $item['name_product'],
+                        'quantity'     => (int)$item['quantity'],
+                        'price'        => (float)$item['price']
+                    ];
+                }
+            }
+
+            // Gabungkan ke dalam order
+            $orders[] = [
+                'order_id'       => (int)$order['order_id'],
+                'total_amount'   => (float)$order['total_amount'],
+                'status'         => $order['status'],
+                'created_at'     => $order['created_at'],
+                'payment_method' => $order['payment_method'],
+                'order_items'    => $orderItems
+            ];
+        }
+
+        return [
+            'status'  => 'success',
+            'code'    => 200,
+            'message' => 'Order history retrieved successfully',
+            'data'    => $orders
+        ];
+    }
+    public function handleDeleteOrderByOrderId($orderId, $userId)
+    {
+        // Ambil detail order berdasarkan order_id
+        $orderResult = $this->userModel->getOrderByOrderId($orderId);
+        if (!$orderResult || $orderResult->num_rows === 0) {
+            return [
+                'status' => 'error',
+                'code'   => 404,
+                'message' => 'Order not found'
+            ];
+        }
+
+        $order = $orderResult->fetch_assoc();
+
+        if ((int)$order['user_id'] !== (int)$userId) {
+            return [
+                'status' => 'error',
+                'code'   => 403,
+                'message' => 'Unauthorized to delete this order'
+            ];
+        }
+
+        // Hapus order berdasarkan order_id
+        $result = $this->userModel->deleteOrderByOrderId($orderId);
+        if (!$result) {
+            return [
+                'status' => 'error',
+                'code'   => 500,
+                'message' => 'Failed to delete order'
+            ];
+        }
+
+        return [
+            'status'  => 'success',
+            'code'    => 200,
+            'message' => 'Order deleted successfully'
+        ];
+    }
 }
