@@ -7,14 +7,15 @@ require_once(__DIR__ . '/../includes/header-admin.php');
 
 <div class="c-admin-category-dashboard">
     <div class="c-category-list">
-        <h1>Daftar category</h1>
+        <div class="c-action-category" style="display: flex; justify-content: space-between;">
+            <h1>Daftar category</h1>
+            <button type="button" id="add-category-btn">Tambah category <i class="fa-solid fa-plus"></i></button>
+        </div>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Role</th>
+                    <th>Nama Category</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -24,19 +25,12 @@ require_once(__DIR__ . '/../includes/header-admin.php');
     </div>
 
 
-    <div class="c-user-form" id="popup-user-form">
-        <h2 id="form-title">Tambah User</h2>
-        <form id="userForm">
-            <input type="hidden" id="userId">
-            <label for="name">Nama:</label>
-            <input type="text" id="input-nama-user">
-            <label for="email">Email:</label>
-            <input type="email" id="input-email">
-            <label for="role">Role:</label>
-            <select id="input-role-id">
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
-            </select>
+    <div class="c-category-form" id="popup-category-form">
+        <h2 id="form-title">Tambah category</h2>
+        <form id="categoryForm">
+            <input type="hidden" id="categoryId">
+            <label for="name">Nama Category:</label>
+            <input type="text" id="input-nama-category">
             <button type="submit" id="save-btn">Simpan</button>
             <button type="button" id="cancel-btn">Batal</button>
         </form>

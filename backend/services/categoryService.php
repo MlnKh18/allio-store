@@ -150,18 +150,25 @@ class CategoryService
         $allCategories = $this->adminModel->getAllCategories();
         if ($allCategories && $allCategories->num_rows > 0) {
             while ($row = $allCategories->fetch_assoc()) {
+                // Pastikan id_category-nya memang ada di row
+                if (!isset($row['id_category'])) {
+                    continue; // skip kalau nggak ada id_category
+                }
+
+                // Bandingkan nama kategori (case insensitive) dan pastikan bukan dirinya sendiri
                 if (
                     strcasecmp(trim($row['name_category']), $name) === 0 &&
                     intval($row['id_category']) !== intval($id)
                 ) {
                     return [
                         'status' => 'error',
-                        'code' => 409,
+                        'code'   => 409,
                         'message' => 'Category name already exists'
                     ];
                 }
             }
         }
+
 
         // Update kategori
         $result = $this->adminModel->editCategory($id, $name);

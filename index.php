@@ -415,6 +415,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response = $userController->handleDeleteUserById($id);
         echo json_encode($response);
     } else if ($page === 'backend/deleteCategoryById') {
+        header('Content-Type: application/json');
+
         $inputData = json_decode(file_get_contents('php://input'), true);
         $id = isset($inputData['id']) ? intval($inputData['id']) : 0;
 
@@ -430,7 +432,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Menangani penghapusan kategori berdasarkan ID
         $categoryController = new CategoryController();
-        $response = $categoryController->handleDeleteCategory($id);
+        $response = $categoryController->handleDeleteCategory($id); // <- pastikan method ini yang dipanggil
         echo json_encode($response);
     } else if ($page === 'backend/deleteProductById') {
         $inputData = json_decode(file_get_contents('php://input'), true);
