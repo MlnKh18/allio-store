@@ -44,6 +44,9 @@ $(document).ready(function () {
         console.log("data", categoryId, nama_category);
         editCategory(categoryId, nama_category);
       });
+    $(document).on("click", "#cancel-btn", function () {
+      $("#popup-category-form").hide();
+    });
   });
 
   // Event delete
@@ -134,21 +137,21 @@ function editCategory(id, nama_category) {
   });
 }
 function deleteDatacategory(categoryId) {
-    $.ajax({
-        url: `${baseUrl}backend/deleteCategoryById`,
-        type: "DELETE",
-        contentType: "application/json",
-        dataType: "json",
-        data: JSON.stringify({ id: categoryId }),
-        success: function (response) {
-            console.log("Category berhasil dihapus:", response);
-            alert("Data Category berhasil dihapus.");
-            loadDataCategory(); // Reload data tanpa reload halaman
-            $("#popup-category-form").hide(); // Sembunyikan popup jika terbuka
-        },
-        error: function (xhr, status, error) {
-            console.error("Error saat menghapus Category:", error);
-            alert("Gagal menghapus Category.");
-        },
-    });
+  $.ajax({
+    url: `${baseUrl}backend/deleteCategoryById`,
+    type: "DELETE",
+    contentType: "application/json",
+    dataType: "json",
+    data: JSON.stringify({ id: categoryId }),
+    success: function (response) {
+      console.log("Category berhasil dihapus:", response);
+      alert("Data Category berhasil dihapus.");
+      loadDataCategory(); // Reload data tanpa reload halaman
+      $("#popup-category-form").hide(); // Sembunyikan popup jika terbuka
+    },
+    error: function (xhr, status, error) {
+      console.error("Error saat menghapus Category:", error);
+      alert("Gagal menghapus Category.");
+    },
+  });
 }

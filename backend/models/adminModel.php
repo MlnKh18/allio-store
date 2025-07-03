@@ -126,7 +126,7 @@ class AdminModel
     {
         $sql = "UPDATE products SET name_product = ?, price = ?, description = ?, image_url = ?, category_id = ? WHERE product_id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssdsii", $name, $price, $description, $image, $categoryId, $id);
+        $stmt->bind_param("sdssii", $name, $price, $description, $image, $categoryId, $id);
         return $stmt->execute();
     }
 

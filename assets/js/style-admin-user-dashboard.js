@@ -26,6 +26,10 @@ $(document).ready(function () {
         console.log("data", userId, nama_user, email, role_id);
         editUser(userId, nama_user, email, role_id);
       });
+    $(document).on("click", "#cancel-btn", function () {
+      
+      $("#popup-user-form").hide();
+    });
   });
 
   // Event delete

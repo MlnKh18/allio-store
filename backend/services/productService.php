@@ -167,6 +167,8 @@ class ProductService
                 'message' => 'Invalid product ID'
             ];
         }
+
+        // Cek produk ada atau tidak
         $executeId = $this->userModel->getProductById($id);
         if ($executeId->num_rows === 0) {
             return [
@@ -175,6 +177,8 @@ class ProductService
                 'message' => 'Product not found'
             ];
         }
+
+        // Cek kategori ada atau tidak
         $executeCategory = $this->adminModel->getCategoryById($categoryId);
         if ($executeCategory->num_rows === 0) {
             return [
@@ -184,14 +188,21 @@ class ProductService
             ];
         }
 
-        if (empty($name) || empty($price) || empty($description) || empty($image) || empty($categoryId)) {
+        // Validasi field wajib (description boleh kosong)
+        if (
+            $name === '' ||
+            $price === '' ||
+            $image === '' ||
+            $categoryId === ''
+        ) {
             return [
                 'status' => 'error',
                 'code' => 400,
-                'message' => 'All fields are required'
+                'message' => 'All fields except description are required'
             ];
         }
 
+        // Validasi nama minimal 3 karakter
         if (strlen($name) < 3) {
             return [
                 'status' => 'error',
@@ -200,6 +211,7 @@ class ProductService
             ];
         }
 
+        // Validasi harga
         if (!is_numeric($price) || $price <= 0) {
             return [
                 'status' => 'error',
@@ -208,6 +220,7 @@ class ProductService
             ];
         }
 
+        // Validasi categoryId
         if (!is_numeric($categoryId) || $categoryId <= 0) {
             return [
                 'status' => 'error',
@@ -216,7 +229,7 @@ class ProductService
             ];
         }
 
-        // Validasi apakah image adalah URL yang valid
+        // Validasi URL gambar
         if (!filter_var($image, FILTER_VALIDATE_URL)) {
             return [
                 'status' => 'error',
@@ -225,7 +238,7 @@ class ProductService
             ];
         }
 
-        // Optional: Validasi ekstensi gambar dari URL
+        // Validasi ekstensi gambar
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
         $imageExtension = strtolower(pathinfo(parse_url($image, PHP_URL_PATH), PATHINFO_EXTENSION));
 
@@ -237,6 +250,12 @@ class ProductService
             ];
         }
 
+        // Kalau deskripsi kosong, set jadi default
+        if ($description === '') {
+            $description = 'Tidak ada deskripsi';
+        }
+
+        // Update ke database
         $result = $this->adminModel->editProduct($id, $name, $price, $description, $image, $categoryId);
 
         if ($result) {
@@ -253,6 +272,7 @@ class ProductService
             ];
         }
     }
+
 
 
     public function handleDeleteProductById($product_id)

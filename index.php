@@ -355,7 +355,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $categoryId = isset($inputData['categoryId']) ? intval($inputData['categoryId']) : 0;
 
         // Validasi input
-        if ($id <= 0 || empty($name) || $price <= 0 || empty($description) || empty($image) || $categoryId <= 0) {
+        if ($id <= 0 || empty($name) || $price <= 0 || empty($image) || $categoryId <= 0) {
             echo json_encode([
                 'status' => 'error',
                 'code' => 400,

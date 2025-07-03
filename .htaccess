@@ -10,6 +10,9 @@ RewriteRule ^cart$ views/cart/cartScreen.php [L]
 RewriteRule ^historyOrder$ views/history/historyScreen.php [L]
 RewriteRule ^user-dashboard$ views/admin/user-dashboard.php [L]
 RewriteRule ^category-dashboard$ views/admin/category-dashboard.php [L]
+RewriteRule ^product-dashboard$ views/admin/product-dashboard.php [L]
+
+
 
 
 # # Untuk backend, pastikan permintaan menuju index.php untuk diproses lebih lanjut

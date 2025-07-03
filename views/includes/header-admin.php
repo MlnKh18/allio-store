@@ -3,6 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,7 +33,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <ul>
                 <li><a href="./user-dashboard">User</a></li>
                 <li><a href="./category-dashboard">Category</a></li>
-                <li><a href="./product">Product</a></li>
+                <li><a href="./product-dashboard">Product</a></li>
             </ul>
         </aside>
         <main>
