@@ -36,7 +36,7 @@ checkAuth();
             <h3>Halo, <?php echo $_SESSION['name_user']; ?></h3>
             <ul>
                 <li><a href="./cart"><i class="fa-solid fa-cart-shopping"></i></a></li>
-                <li><a href="./cart"><i class="fa-solid fa-clock-rotate-left"></i></a></li>
+                <li><a href="./historyOrder"><i class="fa-solid fa-clock-rotate-left"></i></a></li>
                 <li><a href="./#"><i class="fa-solid fa-user"></i></a></li>
             </ul>
         </header>

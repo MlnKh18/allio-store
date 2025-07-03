@@ -64,3 +64,93 @@ body .c-cart {
   border-radius: 5px;
   cursor: pointer;
 }
+#popup-paymentMetod {
+  display: none; /* default hidden */
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* semi transparan */
+
+  animation: fadeIn 0.3s ease;
+}
+
+/* Popup box */
+.popup-content {
+  background-color: #fff;
+  padding: 24px 32px;
+  border-radius: 12px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.4s ease;
+  margin: 0; /* pastikan tidak ada margin */
+}
+
+/* Judul popup */
+.popup-content h3 {
+  margin-top: 0;
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Tombol pembayaran */
+.btn-payment {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-payment:hover {
+  background-color: #0056b3;
+}
+
+/* Tombol close */
+.btn-close {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #dc3545;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-close:hover {
+  background-color: #c82333;
+}
+
+/* Animasi fadeIn */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animasi slideDown */
+@keyframes slideDown {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -114,20 +114,67 @@ class UserModel
         $stmt->bind_param("iiid", $orderId, $productId, $quantity, $price);
         return $stmt->execute();
     }
-
-    public function getOrderHistoryByUserId($userId)
+    public function getOrderHistoryWithPaymentByUserId($userId)
     {
-        $sql = "SELECT * FROM orders WHERE user_id = ?";
+        $sql = "SELECT o.*, p.payment_method FROM orders o JOIN payments p ON o.order_id = p.order_id WHERE o.user_id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $userId);
         $stmt->execute();
         return $stmt->get_result();
     }
+    public function getOrderItemsByOrderId($orderId)
+    {
+        $sql = "SELECT oi.*, p.name_product FROM order_items oi 
+            JOIN products p ON oi.product_id = p.product_id
+            WHERE oi.order_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $orderId);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+    public function getOrderByOrderId($orderId)
+    {
+        $sql = "SELECT * FROM orders WHERE order_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $orderId);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
     public function deleteOrderHistoryByUserId($id)
     {
         $sql = "DELETE FROM orders WHERE user_id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
+    public function deleteOrderByOrderId($orderId)
+    {
+        // Hapus order items terlebih dahulu
+        $sqlItems = "DELETE FROM order_items WHERE order_id = ?";
+        $stmtItems = $this->conn->prepare($sqlItems);
+        $stmtItems->bind_param("i", $orderId);
+        $stmtItems->execute();
+
+        //Hapus pembayaran terkait
+        $sqlPayment = "DELETE FROM payments WHERE order_id = ?";
+        $stmtPayment = $this->conn->prepare($sqlPayment);
+        $stmtPayment->bind_param("i", $orderId);
+        $stmtPayment->execute();
+
+        // Hapus order
+        $sqlOrder = "DELETE FROM orders WHERE order_id = ?";
+        $stmtOrder = $this->conn->prepare($sqlOrder);
+        $stmtOrder->bind_param("i", $orderId);
+        return $stmtOrder->execute();
+    }
+
+    // ===============================================================================================================payment
+    public function createPayment($orderId, $paymentMethod)
+    {
+        $sql = "INSERT INTO payments (order_id, payment_method, payment_status, paid_at) VALUES (?, ?, 'pending', NOW())";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("is", $orderId, $paymentMethod);
         return $stmt->execute();
     }
 }

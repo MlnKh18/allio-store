@@ -1,0 +1,80 @@
+body .c-order {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.c-order h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.c-order-item {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 25px;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.c-order-item h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 20px;
+}
+
+.c-order-item p {
+  margin: 5px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.c-product-list {
+  margin-top: 15px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.c-product-item-cart {
+  flex: 1 1 calc(50% - 10px);
+  border: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
+  padding: 15px 0 15px 15px;
+  border-radius: 6px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.c-product-item-cart h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #222;
+}
+
+.c-product-item-cart p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.btn-remove {
+  margin-top: 10px;
+  padding: 6px 12px;
+  border: none;
+  background-color: #e74c3c;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-remove:hover {
+  background-color: #c0392b;
+}

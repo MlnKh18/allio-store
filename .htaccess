@@ -7,7 +7,7 @@ RewriteRule ^login$ views/auth/loginScreen.php [L]
 RewriteRule ^register$ views/Auth/registerScreen.php [L]
 RewriteRule ^home$ views/Home/homeScreen.php [L]
 RewriteRule ^cart$ views/cart/cartScreen.php [L]
-# RewriteRule ^pengeluaran$ views/Pengeluaran/pengeluaranScreen.php [L]
+RewriteRule ^historyOrder$ views/history/historyScreen.php [L]
 
 # # Untuk backend, pastikan permintaan menuju index.php untuk diproses lebih lanjut
 RewriteCond %{REQUEST_FILENAME} !-f

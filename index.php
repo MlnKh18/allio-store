@@ -189,6 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $inputData = json_decode(file_get_contents('php://input'), true);
         $userId = isset($inputData['user_id']) ? intval($inputData['user_id']) : 0;
         $totalAmount = isset($inputData['total_amount']) ? floatval($inputData['total_amount']) : 0;
+        $paymentMethod = isset($inputData['payment_method']) ? trim($inputData['payment_method']) : '';
 
         // Validasi input
         if ($userId <= 0 || $totalAmount <= 0) {
@@ -202,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Menangani checkout menggunakan OrderService
         $orderController = new OrderController();
-        $response = $orderController->handleCheckout($userId, $totalAmount);
+        $response = $orderController->handleCheckout($userId, $totalAmount, $paymentMethod);
         echo json_encode($response);
     }
 } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -284,6 +285,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Menangani pengambilan keranjang berdasarkan ID pengguna
             $cartController = new CartController();
             $response = $cartController->getCartItems($userId);
+            echo json_encode($response);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'User ID is required'
+            ]);
+        }
+    } else if (strpos($page, 'backend/getOrderHistory') === 0) {
+        // Pisahkan $page jadi array berdasarkan '/'
+        $parts = explode('/', $page);
+
+        // Cek apakah ada parameter userId di $parts[2]
+        if (isset($parts[2])) {
+            $userId = intval($parts[2]);
+
+            // Validasi input
+            if ($userId <= 0) {
+                echo json_encode([
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Invalid user ID'
+                ]);
+                exit;
+            }
+
+            // Menangani pengambilan riwayat pesanan berdasarkan ID pengguna
+            $orderController = new OrderController();
+            $response = $orderController->handleGetOrderHistory($userId);
             echo json_encode($response);
         } else {
             echo json_encode([
@@ -411,6 +441,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Menangani pembersihan keranjang
         $cartController = new CartController();
         $response = $cartController->clearCart($userId);
+        echo json_encode($response);
+    } else if ($page === 'backend/deleteOrder') {
+        $inputData = json_decode(file_get_contents('php://input'), true);
+        $orderId = isset($inputData['order_id']) ? intval($inputData['order_id']) : 0;
+        $userId = isset($inputData['user_id']) ? intval($inputData['user_id']) : 0;
+
+        // Validasi input
+        if ($orderId <= 0) {
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Invalid order ID'
+            ]);
+            exit;
+        }
+
+        // Menangani penghapusan order berdasarkan ID
+        $orderController = new OrderController();
+        $response = $orderController->handleDeleteOrder($orderId, $userId);
         echo json_encode($response);
     }
 }

@@ -18,6 +18,14 @@ require_once(__DIR__ . '/../includes/header.php');
                 </div>
             </div>
             <button type="button" id="checkout-button">Checkout</button>
+            <div id="popup-paymentMetod">
+                <div class="popup-content">
+                    <h3>Pilih Metode Pembayaran</h3>
+                    <button type="button" class="btn-payment" id="payment-cod">Bayar di Tempat (COD)</button>
+                    <button type="button" class="btn-payment" id="payment-transfer">Transfer Bank</button>
+                    <button type="button" class="btn-close">Tutup</button>
+                </div>
+            </div>
     </section>
 </div>
 
